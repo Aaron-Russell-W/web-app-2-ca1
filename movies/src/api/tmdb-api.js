@@ -131,3 +131,31 @@ export const getPopularActors = () => {
       throw error;
     });
 };
+export const getActorMovieCredits = (actorId) => {
+  return fetch(
+    `https://api.themoviedb.org/3/person/${actorId}/movie_credits?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
+  )
+    .then((res) => {
+      if (!res.ok) {
+        return res.json().then(json => { throw new Error(json.message) });
+      }
+      return res.json();
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+export const getActorDetails = (actorId) => {
+  return fetch(
+    `https://api.themoviedb.org/3/person/${actorId}?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
+  )
+  .then(res => {
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return res.json();
+  })
+  .catch(error => {
+    throw error;
+  });
+};

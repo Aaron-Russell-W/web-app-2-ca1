@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { getPopularActors } from '../api/tmdb-api'; // Adjust the path as per your project structure
+import { Link } from 'react-router-dom';
+import { getPopularActors } from '../api/tmdb-api';
 
 const PopularActorsPage = () => {
   const [actors, setActors] = useState([]);
 
   useEffect(() => {
     getPopularActors()
-      .then((data) => {
-        setActors(data.results); // Assuming the API response has a 'results' key with actors data
+      .then(data => {
+        setActors(data.results);
       })
-      .catch((error) => {
-        console.error('Error fetching actors:', error);
-      });
+      .catch(error => console.error(error));
   }, []);
 
   return (
@@ -19,11 +18,10 @@ const PopularActorsPage = () => {
       <h1>Popular Actors</h1>
       <div>
         {actors.map((actor) => (
-          <div key={actor.id}>
-            <h2>{actor.name}</h2>
+            <Link to={`/actors/${actor.id}`} key={actor.id}>
             <img src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`} alt={actor.name} />
-            {/* Display more details here */}
-          </div>
+            <h2>{actor.name}</h2>
+          </Link>
         ))}
       </div>
     </div>
