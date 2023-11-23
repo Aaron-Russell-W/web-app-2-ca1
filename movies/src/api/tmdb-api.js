@@ -116,3 +116,18 @@ export const getMovieWatchProviders = ({queryKey}) => {
       throw error;
     });
 };
+
+export const getPopularActors = () => {
+  return fetch(
+    `https://api.themoviedb.org/3/person/popular?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=1`
+  )
+    .then((res) => {
+      if (!res.ok) {
+        return res.json().then(json => { throw new Error(json.message) });
+      }
+      return res.json();
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
