@@ -9,7 +9,7 @@ import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
 import MovieReviews from "../movieReviews";
-
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 const root = {
     display: "flex",
     justifyContent: "center",
@@ -20,7 +20,7 @@ const root = {
 };
 const chip = { margin: 0.5 };
 
-const MovieDetails = ({ movie }) => {
+const MovieDetails = ({ movie, availability }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -65,6 +65,14 @@ const MovieDetails = ({ movie }) => {
             <Chip label={c.name} sx={{...chip}} />
           </li>
         ))}
+      </Paper>
+      <Paper component="ul" sx={{...root}}>
+        <Chip label="Where to watch:" sx={{...chip}} color="primary" />
+          {availability.results.IE.buy.map((b) => (
+            <li key={b.provider_name}>
+              <Chip label={b.provider_name} sx={{...chip}} />
+            </li>
+          ))}
       </Paper>
       <Fab
         color="secondary"

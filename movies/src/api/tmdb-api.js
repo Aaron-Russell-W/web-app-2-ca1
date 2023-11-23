@@ -100,3 +100,19 @@ export const getNowPlayingMovies = () => {
       throw error;
     });
 };
+export const getMovieWatchProviders = ({queryKey}) => {
+  const[,idPart]=queryKey
+  const { id } = idPart
+  return fetch(
+    `https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=${process.env.REACT_APP_TMDB_KEY}`
+  )
+    .then((res) => {
+      if (!res.ok) {
+        return res.json().then(json => { throw new Error(json.message) });
+      }
+      return res.json();
+    })
+    .catch((error) => {
+      throw error;
+    });
+};

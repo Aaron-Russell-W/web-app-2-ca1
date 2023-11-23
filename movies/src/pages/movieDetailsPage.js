@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from 'react-router-dom';
-import { getMovie } from '../api/tmdb-api';
+import { getMovie, getMovieWatchProviders } from '../api/tmdb-api';
 import { useQuery } from "react-query";
 import MovieDetails from "../components/movieDetails/";
 import PageTemplate from "../components/templateMoviePage";
@@ -13,7 +13,10 @@ const MoviePage = (props) => {
     ["movie", { id: id }],
     getMovie
   );
-
+  const {data: availability} = useQuery(
+    ["watch", { id: id}],
+    getMovieWatchProviders
+  )
   if (isLoading) {
     return <Spinner />;
   }
@@ -27,7 +30,7 @@ const MoviePage = (props) => {
       {movie ? (
         <>
           <PageTemplate movie={movie}>
-            <MovieDetails movie={movie} />
+            <MovieDetails movie={movie} availability={availability}/>
           </PageTemplate>
         </>
       ) : (
