@@ -187,3 +187,24 @@ export const getMovieCast = (args) => {
     throw error;
   });
 };
+
+export const getLatestMovie = () => {
+  return fetch(
+    "https://api.themoviedb.org/3/movie/latest?api_key=" + process.env.REACT_APP_TMDB_KEY + "&language=en-US",
+    {
+      headers: {
+        'Authorization': `Bearer ${process.env.REACT_APP_TMDB_BEARER_TOKEN}`,
+        'accept': 'application/json'
+      }
+    }
+  )
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .catch((error) => {
+    throw error;
+  });
+};

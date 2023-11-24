@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
+import { getLatestMovie } from "../../api/tmdb-api";
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
 const SiteHeader = ({ history }) => {
@@ -29,6 +29,7 @@ const SiteHeader = ({ history }) => {
     { label: "Upcoming", path: "/movies/upcoming" },
     { label: "Now Playing", path: "/movies/nowplaying" },
     { label: "Popular Actors", path: "/actors/popular" }
+  
   ];
 
   const handleMenuSelect = (pageURL) => {
@@ -38,7 +39,21 @@ const SiteHeader = ({ history }) => {
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const [latestMovie, setLatestMovie] = useState(null);
 
+  // Function to navigate to the movie detail page
+  const navigateToMovieDetail = (movieId) => {
+    navigate(`/movies/${movieId}`);
+  };
+  useEffect(() => {
+    getLatestMovie()
+      .then(data => {
+        setLatestMovie(data);
+      })
+      .catch(error => {
+        console.error("Failed to fetch latest movie:", error);
+      });
+  }, []);
   return (
     <>
       <AppBar position="fixed" color="secondary">
@@ -49,6 +64,11 @@ const SiteHeader = ({ history }) => {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             All you ever wanted to know about Movies!
           </Typography>
+          {latestMovie && (
+          <Button color="inherit" onClick={() => navigateToMovieDetail(latestMovie.id)}>
+            Latest Movie: {latestMovie.title}
+          </Button>
+        )}
             {isMobile ? (
               <>
                 <IconButton

@@ -13,7 +13,7 @@ Name: Aaron Russell
 + Actor Details Page which links to the individual's movies
 + Availability added to a movie detail page
 + Now Playing Page (Currently in Cinema)
-+ 
++ Where to watch
 + etc
 + etc
 
@@ -31,7 +31,7 @@ e.g.
 + Gets an individual Actors details - person/id
 + Gets an actors movie credits = person/id/movie_credits
 + Gets a list of currently popular actors - /person/popular
-+
++ Where to watch endpoint -
 ## Routing.
 
 [ List the __new routes__ supported by your app and state the associated page.]
