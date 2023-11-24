@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams,Link } from 'react-router-dom';
 import { getActorMovieCredits, getActorDetails } from '../api/tmdb-api';
 
 const ActorDetails = () => {

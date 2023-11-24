@@ -100,6 +100,8 @@ export const getNowPlayingMovies = () => {
       throw error;
     });
 };
+
+// Parameterised Endpoint
 export const getMovieWatchProviders = ({queryKey}) => {
   const[,idPart]=queryKey
   const { id } = idPart
@@ -116,7 +118,7 @@ export const getMovieWatchProviders = ({queryKey}) => {
       throw error;
     });
 };
-
+// Static Endpoint
 export const getPopularActors = () => {
   return fetch(
     `https://api.themoviedb.org/3/person/popular?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=1`
@@ -131,6 +133,7 @@ export const getPopularActors = () => {
       throw error;
     });
 };
+// Parameterised Endpoint
 export const getActorMovieCredits = (actorId) => {
   return fetch(
     `https://api.themoviedb.org/3/person/${actorId}/movie_credits?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
@@ -145,6 +148,7 @@ export const getActorMovieCredits = (actorId) => {
       throw error;
     });
 };
+// Parameterised Endpoint
 export const getActorDetails = (actorId) => {
   return fetch(
     `https://api.themoviedb.org/3/person/${actorId}?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
@@ -152,6 +156,30 @@ export const getActorDetails = (actorId) => {
   .then(res => {
     if (!res.ok) {
       throw new Error('Network response was not ok');
+    }
+    return res.json();
+  })
+  .catch(error => {
+    throw error;
+  });
+
+};
+
+//Parameterised Endpoint
+export const getMovieCast = (args) => {
+  const [, idPart] = args.queryKey;
+  const { id } = idPart;
+
+  console.log("Fetching cast for movie ID:", id); // For debugging
+
+  return fetch(
+    `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.REACT_APP_TMDB_KEY}`
+  )
+  .then(res => {
+    if (!res.ok) {
+      return res.json().then(json => { 
+        throw new Error(json.message || 'Network response was not ok');
+      });
     }
     return res.json();
   })

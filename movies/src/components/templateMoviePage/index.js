@@ -3,25 +3,36 @@ import MovieHeader from "../headerMovie";
 import Grid from "@mui/material/Grid";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import { getMovieImages } from "../../api/tmdb-api";
+import { Link } from 'react-router-dom';
+import { getMovieImages, getMovieCast } from "../../api/tmdb-api";
 import { useQuery } from "react-query";
-import Spinner from '../spinner'
+import Spinner from '../spinner';
 
 const TemplateMoviePage = ({ movie, children }) => {
-  const { data , error, isLoading, isError } = useQuery(
+  const { data: imageData, error: imageError, isLoading: imageLoading, isError: imageIsError } = useQuery(
     ["images", { id: movie.id }],
     getMovieImages
   );
 
-  if (isLoading) {
+  const { data: castData, isLoading: castLoading, isError: castIsError } = useQuery(
+    ['cast', { id: movie.id }],
+    getMovieCast
+  );
+
+  if (imageLoading || castLoading) {
     return <Spinner />;
   }
 
-  if (isError) {
-    return <h1>{error.message}</h1>;
+  if (imageIsError) {
+    return <h1>{imageError.message}</h1>;
   }
-  const images = data.posters 
 
+  if (castIsError) {
+    // Handle cast fetch error
+  }
+
+  const images = imageData.posters;
+  const cast = castData?.cast;
 
   return (
     <>
@@ -34,22 +45,31 @@ const TemplateMoviePage = ({ movie, children }) => {
             flexWrap: "wrap",
             justifyContent: "space-around",
           }}>
-            <ImageList 
-                cols={1}>
-                {images.map((image) => (
-                    <ImageListItem key={image.file_path} cols={1}>
-                    <img
-                        src={`https://image.tmdb.org/t/p/w500/${image.file_path}`}
-                        alt={image.poster_path}
-                    />
-                    </ImageListItem>
-                ))}
+            <ImageList cols={1}>
+              {images.map((image) => (
+                <ImageListItem key={image.file_path} cols={1}>
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500/${image.file_path}`}
+                    alt={image.poster_path}
+                  />
+                </ImageListItem>
+              ))}
             </ImageList>
           </div>
         </Grid>
 
         <Grid item xs={9}>
           {children}
+          <h3>Cast</h3>
+          <div>
+            {cast.map((actor) => (
+              <div key={actor.id}>
+                <Link to={`/actors/${actor.id}`}>
+                  {actor.name}
+                </Link>
+              </div>
+            ))}
+          </div>
         </Grid>
       </Grid>
     </>
