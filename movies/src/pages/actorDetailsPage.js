@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getActorMovieCredits, getActorDetails } from '../api/tmdb-api';
 
 const ActorDetails = () => {
-  const { id: actorId } = useParams(); // Change 'actorId' to 'id' to match the route parameter
+  const { id: actorId } = useParams();
   const [actorDetails, setActorDetails] = useState(null);
   const [movies, setMovies] = useState([]);
 
@@ -23,18 +23,14 @@ const ActorDetails = () => {
 
   return (
     <div>
-      {actorDetails && (
-        <div>
-          <h2>{actorDetails.name}</h2>
-          {/* Display other actor details */}
-        </div>
-      )}
-
+      {/* Actor Details */}
       <div>
         <h3>Movies</h3>
         {movies.map(movie => (
           <div key={movie.id}>
-            <p>{movie.title}</p>
+            <Link to={`/movies/${movie.id}`}>
+              <p>{movie.title}</p>
+            </Link>
             {/* Display other movie details */}
           </div>
         ))}
