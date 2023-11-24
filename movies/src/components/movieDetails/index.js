@@ -25,19 +25,39 @@ const MovieDetails = ({ movie, availability }) => {
 
   return (
     <>
-      {/* ... existing Typography components */}
+      <Typography variant="h5" component="h3">
+        Overview
+      </Typography>
 
-      <Paper component="ul" sx={{...root}}>
-        <Chip label="Genres" sx={{...chip}} color="primary" />
-        {movie.genres && movie.genres.map((g) => (
+      <Typography variant="h6" component="p">
+        {movie.overview}
+      </Typography>
+
+      <Paper 
+        component="ul" 
+        sx={{...root}}
+      >
+        <li>
+          <Chip label="Genres" sx={{...chip}} color="primary" />
+        </li>
+        {movie.genres.map((g) => (
           <li key={g.name}>
             <Chip label={g.name} sx={{...chip}} />
           </li>
         ))}
       </Paper>
-
-      {/* ... other Paper components for movie details */}
-
+      <Paper component="ul" sx={{...root}}>
+        <Chip icon={<AccessTimeIcon />} label={`${movie.runtime} min.`} />
+        <Chip
+          icon={<MonetizationIcon />}
+          label={`${movie.revenue.toLocaleString()}`}
+        />
+        <Chip
+          icon={<StarRate />}
+          label={`${movie.vote_average} (${movie.vote_count}`}
+        />
+        <Chip label={`Released: ${movie.release_date}`} />
+      </Paper>
       <Paper component="ul" sx={{...root}}>
         <Chip label="Production Countries" sx={{...chip}} color="primary" />
         {movie.production_countries && movie.production_countries.map((c) => (
@@ -55,10 +75,23 @@ const MovieDetails = ({ movie, availability }) => {
           </li>
         ))}
       </Paper>
-
-      {/* ... Fab and Drawer components */}
-    </>
+      <Fab
+        color="secondary"
+        variant="extended"
+        onClick={() =>setDrawerOpen(true)}
+        sx={{
+          position: 'fixed',
+          bottom: '1em',
+          right: '1em'
+        }}
+      >
+        <NavigationIcon />
+        Reviews
+      </Fab>
+      <Drawer anchor="top" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+        <MovieReviews movie={movie} />
+      </Drawer>
+      </>
   );
 };
-
-export default MovieDetails;
+export default MovieDetails ;
