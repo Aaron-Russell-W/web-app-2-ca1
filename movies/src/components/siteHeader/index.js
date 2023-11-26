@@ -12,6 +12,7 @@ import { styled } from '@mui/material/styles';
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { getLatestMovie } from "../../api/tmdb-api";
+import { useAuth } from '../../authHelpers'; 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
 const SiteHeader = ({ history }) => {
@@ -54,6 +55,7 @@ const SiteHeader = ({ history }) => {
         console.error("Failed to fetch latest movie:", error);
       });
   }, []);
+  const { currentUser } = useAuth();
   return (
     <>
       <AppBar position="fixed" color="secondary">
@@ -64,6 +66,11 @@ const SiteHeader = ({ history }) => {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             All you ever wanted to know about Movies!
           </Typography>
+          {currentUser && (
+            <Typography variant="h6" color="inherit" sx={{ flexGrow: 0, marginRight: 2 }}>
+              Welcome, {currentUser.displayName || 'User'}!
+            </Typography>
+          )}
           {latestMovie && (
           <Button color="inherit" onClick={() => navigateToMovieDetail(latestMovie.id)}>
             Latest Movie: {latestMovie.title}
