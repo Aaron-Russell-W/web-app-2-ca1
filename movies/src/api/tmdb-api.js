@@ -187,7 +187,7 @@ export const getMovieCast = (args) => {
     throw error;
   });
 };
-
+// Static Endpoint
 export const getLatestMovie = () => {
   return fetch(
     "https://api.themoviedb.org/3/movie/latest?api_key=" + process.env.REACT_APP_TMDB_KEY + "&language=en-US",
