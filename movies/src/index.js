@@ -15,42 +15,45 @@ import LoginFunc from "./components/loginPage";
 import NowPlayingPage from "./pages/nowPlayingMoviesPage";
 import PopularActorsPage from "./pages/popularActorsPage";
 import ActorDetails from "./pages/actorDetailsPage";
+import { AuthProvider, ProtectedRoute } from "./authHelpers";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 360000,
       refetchInterval: 360000,
-      frefetchOnWindowFocus: false
+      refetchOnWindowFocus: false
     },
   },
 });
 
-
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <SiteHeader />
-        <MoviesContextProvider>
-        <Routes>
-          <Route path="/reviews/form" element={ <AddMovieReviewPage/> } />
-          <Route path="/movies/favourites" element={<FavouriteMoviesPage />} />
-          <Route path="/movies/:id" element={<MoviePage />} />
-          <Route path="/" element={<LoginFunc />}/>
-          <Route path="/home" element={<HomePage />} />
-          <Route path="*" element={ <Navigate to="/" /> } />
-          <Route path="/reviews/:id" element={<MovieReviewPage />} />
-          <Route path="/movies/upcoming" element={<UpcomingPage />} />
-          <Route path="/movies/nowplaying" element={<NowPlayingPage/>} />
-          <Route path="/actors/popular" element={<PopularActorsPage/>} />
-          <Route path="/actors/:id" element={<ActorDetails/>}/>
-        </Routes>
-        </MoviesContextProvider>
-      </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <AuthProvider> {/* Wrap with AuthProvider */}
+        <BrowserRouter>
+          <SiteHeader />
+          <MoviesContextProvider>
+          <Routes>
+        <Route path="/" element={<LoginFunc />} />
+        <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+        <Route path="/movies/favourites" element={<ProtectedRoute><FavouriteMoviesPage /></ProtectedRoute>} />
+        <Route path="/movies/:id" element={<ProtectedRoute><MoviePage /></ProtectedRoute>} />
+        <Route path="/reviews/form" element={<ProtectedRoute><AddMovieReviewPage /></ProtectedRoute>} />
+        <Route path="/reviews/:id" element={<ProtectedRoute><MovieReviewPage /></ProtectedRoute>} />
+        <Route path="/movies/upcoming" element={<ProtectedRoute><UpcomingPage /></ProtectedRoute>} />
+        <Route path="/movies/nowplaying" element={<ProtectedRoute><NowPlayingPage /></ProtectedRoute>} />
+        <Route path="/actors/popular" element={<ProtectedRoute><PopularActorsPage /></ProtectedRoute>} />
+        <Route path="/actors/:id" element={<ProtectedRoute><ActorDetails /></ProtectedRoute>} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+          </MoviesContextProvider>
+        </BrowserRouter>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </AuthProvider>
     </QueryClientProvider>
   );
 };
 
-const rootElement = createRoot( document.getElementById("root") )
+const rootElement = createRoot(document.getElementById("root"));
 rootElement.render(<App />);
