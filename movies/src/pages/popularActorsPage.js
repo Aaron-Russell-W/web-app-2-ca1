@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getPopularActors } from '../api/tmdb-api';
+import { useQuery } from 'react-query';
 
 const PopularActorsPage = () => {
-  const [actors, setActors] = useState([]);
+  const { data, isLoading, error } = useQuery('popularActors', getPopularActors);
 
-  useEffect(() => {
-    getPopularActors()
-      .then(data => {
-        setActors(data.results);
-      })
-      .catch(error => console.error(error));
-  }, []);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  const actors = data.results;
+
 
   return (
     <div>

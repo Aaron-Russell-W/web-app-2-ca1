@@ -3,6 +3,7 @@ import { useParams,useNavigate } from 'react-router-dom';
 import { getActorDetails, getActorMovieCredits } from '../api/tmdb-api';
 import { Card,CardActionArea,CardMedia, CardContent, Avatar,Box, Tab, Tabs,Grid, Paper, Typography, Accordion, AccordionSummary, AccordionDetails, List, ListItem} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useQuery } from 'react-query';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -26,33 +27,40 @@ const TabPanel = (props) => {
 
 const ActorDetails = () => {
   const { id: actorId } = useParams(); 
-  const [actorDetails, setActorDetails] = useState({});
-  const [movies, setMovies] = useState([]);
+  const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
 
-  useEffect(() => {
-    getActorDetails(actorId)
-      .then(data => {
-        setActorDetails(data);
-      })
-      .catch(error => console.error(error));
+  const { data: actorDetails, isLoading: isLoadingActorDetails, error: errorActorDetails } = useQuery(
+    ['actorDetails', actorId],
+    () => getActorDetails(actorId),
+    { enabled: !!actorId }
+  );
 
-    getActorMovieCredits(actorId)
-      .then(data => {
-        setMovies(data.cast);
-      })
-      .catch(error => console.error(error));
-  }, [actorId]);
+  const { data: movieCredits, isLoading: isLoadingMovies, error: errorMovies } = useQuery(
+    ['actorMovies', actorId],
+    () => getActorMovieCredits(actorId),
+    { enabled: !!actorId }
+  );
+
+  const movies = movieCredits?.cast || [];
+
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
-  const navigate = useNavigate();
-  
   // Function to navigate to movie details
   const navigateToMovie = (movieId) => {
     navigate(`/movies/${movieId}`);
   };
+
+  // Handle loading and error states
+  if (isLoadingActorDetails || isLoadingMovies) {
+    return <div>Loading...</div>;
+  }
+
+  if (errorActorDetails || errorMovies) {
+    return <div>Error: {errorActorDetails?.message || errorMovies?.message}</div>;
+  }
 
   return (
     <Box sx={{ flexGrow: 1, padding: 3 }}>
