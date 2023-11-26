@@ -30,7 +30,7 @@ const queryClient = new QueryClient({
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider> {/* Wrap with AuthProvider */}
+      <AuthProvider>
         <BrowserRouter>
           <SiteHeader />
           <MoviesContextProvider>
