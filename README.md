@@ -20,7 +20,19 @@ This repo is an extension of the Week 7 lab from Web App Development 2. This app
 ## Setup requirements.
 
 Certain variables required in .env directory
-- Fill in details later
+From labs:
+REACT_APP_TMDB_KEY=xxxxxxxxx
+FAST_REFRESH=false
+
+
+From the firebase setup:
+REACT_APP_FIREBASE_API_KEY=xxxxxxx
+REACT_APP_FIREBASE_AUTH_DOMAIN=xxxxxx
+REACT_APP_FIREBASE_PROJECT_ID=xxxxxxx
+REACT_APP_FIREBASE_STORAGE_BUCKET=xxxxxxx
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=xxxxxxx
+REACT_APP_FIREBASE_APP_ID=xxxxxxxx
+REACT_APP_FIREBASE_MEASUREMENT_ID=xxxxxxxxx
 
 ## API endpoints.
 
